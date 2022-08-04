@@ -1,6 +1,4 @@
 
-from faulthandler import cancel_dump_traceback_later
-from os import remove
 import random
 
 
@@ -49,20 +47,52 @@ def total_score(list):
     
 
 
+############### TURN THIS IN A FOR LOOP!
 #DEAL THE PLAYER A CARDS
-deal_player_one = player_cards.append(deal_card())
-deal_player_two = player_cards.append(deal_card())
-deal_player_two = player_cards.append(deal_card())
+player_cards.append(deal_card())
+player_cards.append(deal_card())
 
 #DEAL THE DEALER CARDS
-deal_dealer_one = dealer_cards.append(deal_card())
-deal_dealer_two = dealer_cards.append(deal_card())
+dealer_cards.append(deal_card())
+dealer_cards.append(deal_card())
 
 # print(player_cards)
 if total_score(player_cards) == 0:
-    print(f"You got Black Jack Well Done!")
+    print(f"You where dealt Black Jack well done! YOU WIN!")
     exit()
 elif total_score(player_cards) > 21:
     print("""You have gone bust! \n       :( """)
+    exit()
+
+
+
+player_stick = 0
+
+while player_stick == 0:
+    hit_me = input(f"The total of your cards is {total_score(player_cards)}   Would you like to be dealt another card?!: ")
+    if hit_me.lower() == "y":
+        player_cards.append(deal_card())
+        if total_score(player_cards) > 21:
+            print("""You have gone bust! \n       :( """)
+            exit()
+    else:
+        player_stick = 1
+
+
+dealer_stick = 0
+
+while dealer_stick == 0:
+    if total_score(dealer_cards) < 17:
+        dealer_cards.append(deal_card())
+    else:
+        dealer_stick = 1
+
+print(total_score(dealer_cards))
+print(total_score(player_cards))
+
+
+
+
+
 
 
