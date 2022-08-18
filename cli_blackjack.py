@@ -37,12 +37,12 @@ def deal_card():
 #TOTALS CARDS IN HAND
 def total_score(list):
     #if statement to check for blackjack
-    if list == [11,10] or list == [10,11]:
+    if sum(list) == 21 and len(list) == 2:
         return 0
     elif sum(list) > 21 and 11 in list:
         list.remove(11)
         list.append(1)
-        return(sum(list))
+        return sum(list)
     else:
         return sum(list)
     
@@ -57,45 +57,66 @@ def compare_cards(player_score,dealer_score):
 
 
 def the_game():
+
+    game_over = False
+
     #DEAL THE PLAYER A CARDS
     for i in range(2):
         player_cards.append(deal_card())
         dealer_cards.append(deal_card())
+    
 
+    player_total_score = total_score(player_cards)
+    dealer_total_score = total_score(dealer_cards)
 
-    # print(player_cards)
-    if total_score(player_cards) == 0:
-        print(f"You where dealt Black Jack well done! YOU WIN!")
-        exit()
-    elif total_score(player_cards) > 21:
-        print("""You have gone bust! \n       :( """)
-        exit()
+    while game_over == False:
 
+        print(f"\nYour cards are: {player_cards}, Your current total score is: {sum(player_cards)}")
+        print(f"The dealers first card is {dealer_cards[0]}")
 
-
-    player_stick = 0
-
-    while player_stick == 0:
-        hit_me = input(f"The total of your cards is {total_score(player_cards)}   Would you like to be dealt another card?!: ")
-        if hit_me.lower() == "y":
-            player_cards.append(deal_card())
-            if total_score(player_cards) > 21:
-                print("""You have gone bust! \n       :( """)
-                exit()
+        if player_total_score == 0 or dealer_total_score == 0 or player_total_score > 21:
+            game_over = True
         else:
-            player_stick = 1
+            hit_me = input("Would out like another card? Enter 'y' for yes and 'n' for no: ")
+            if hit_me.lower() == 'y':
+                player_cards.append(deal_card())
+            else:
+                game_over = True
 
-
-    dealer_stick = 0
-
-    while dealer_stick == 0:
-        if total_score(dealer_cards) < 17:
+    while dealer_total_score < 17 and dealer_total_score != 0:
             dealer_cards.append(deal_card())
-        else:
-            dealer_stick = 1
+            dealer_total_score = total_score(dealer_cards)
+    
+    # elif total_score(player_cards) > 21:
+    #     print("""You have gone bust! \n       :( """)
+    #     exit()
+
+
+
+    # player_stick = 0
+
+    # while player_stick == 0:
+    #     hit_me = input(f"The total of your cards is {total_score(player_cards)}   Would you like to be dealt another card?!: ")
+    #     if hit_me.lower() == "y":
+    #         player_cards.append(deal_card())
+    #         if total_score(player_cards) > 21:
+    #             print("""You have gone bust! \n       :( """)
+    #             exit()
+    #     else:
+    #         player_stick = 1
+
+
+    # dealer_stick = 0
+
+    # while dealer_stick == 0:
+    #     if total_score(dealer_cards) < 17:
+    #         dealer_cards.append(deal_card())
+    #     else:
+    #         dealer_stick = 1
 
 
     compare_cards(total_score(player_cards),total_score(dealer_cards))
+    
 
     #play again choice
     # play_again = input("Would you like to play another game?")
