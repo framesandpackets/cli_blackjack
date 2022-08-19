@@ -18,15 +18,6 @@ logo = """
 
 """
 
-
-print(logo)
-print("""          [Welcome to CLI Black Jack!]\n""")
-
-player_cards = []
-dealer_cards = []
-
-
-
 #FUNCTION THAT WILL DEAL CARDS 
 #x4 10 cards in list = 10 suited, jack, queen, king
 def deal_card():
@@ -40,6 +31,7 @@ def total_score(list):
     if sum(list) == 21 and len(list) == 2:
         return 0
     elif sum(list) > 21 and 11 in list:
+        print("\nYou are now using you Ace (11) as a '1'")
         list.remove(11)
         list.append(1)
         return sum(list)
@@ -48,15 +40,30 @@ def total_score(list):
     
 def compare_cards(player_score,dealer_score):
     if player_score == dealer_score:
-        print(f"You have a score of '{player_score}', the dealer has a score of '{dealer_score}'  It's a draw!")
+        return f"\nIt was a draw!"
+    elif dealer_score == 0:
+        return f"\nYou lost, Dealer has blackjack!"
+    elif player_score == 0:
+        return f"\nYou where dealt Blackjack! Congrats you win!"
+    elif player_score > 21:
+        return f"\nYou went bust :("
+    elif dealer_score > 21:
+        return f"\nYou win! The dealer went bust!"
     elif player_score > dealer_score:
-        print(f"You have a score of '{player_score}', the dealer has a score of '{dealer_score}'  You Win this round!")
-    elif player_score < dealer_score:
-        print(f"You have a score of '{player_score}', the dealer has a score of '{dealer_score}'  The Dealer wins this round!")
+        return f"\nYou win! Good lad yourself!"
+    else:
+        return f"\nDealer has won...no good. You lose!"
 
 
 
 def the_game():
+
+    print(logo)
+    print("""          [Welcome to CLI Black Jack!]\n""")
+
+    player_cards = []
+    dealer_cards = []
+
 
     game_over = False
 
@@ -77,9 +84,10 @@ def the_game():
         if player_total_score == 0 or dealer_total_score == 0 or player_total_score > 21:
             game_over = True
         else:
-            hit_me = input("Would out like another card? Enter 'y' for yes and 'n' for no: ")
+            hit_me = input("Would you like another card? Enter 'y' for yes and 'n' for no: ")
             if hit_me.lower() == 'y':
                 player_cards.append(deal_card())
+                player_total_score = total_score(player_cards)
             else:
                 game_over = True
 
@@ -87,45 +95,18 @@ def the_game():
             dealer_cards.append(deal_card())
             dealer_total_score = total_score(dealer_cards)
     
-    # elif total_score(player_cards) > 21:
-    #     print("""You have gone bust! \n       :( """)
-    #     exit()
+    print("\n-------------------------------------")
+    print(f"\nYour hand was {player_cards}. Your total score was: {sum(player_cards)} ")
+    print(f"\nThe Dealers hand was {dealer_cards}. Your total score was: {sum(dealer_cards)} ")
+
+    print(compare_cards(player_total_score, dealer_total_score))
+    print("\n-------------------------------------")
 
 
-
-    # player_stick = 0
-
-    # while player_stick == 0:
-    #     hit_me = input(f"The total of your cards is {total_score(player_cards)}   Would you like to be dealt another card?!: ")
-    #     if hit_me.lower() == "y":
-    #         player_cards.append(deal_card())
-    #         if total_score(player_cards) > 21:
-    #             print("""You have gone bust! \n       :( """)
-    #             exit()
-    #     else:
-    #         player_stick = 1
-
-
-    # dealer_stick = 0
-
-    # while dealer_stick == 0:
-    #     if total_score(dealer_cards) < 17:
-    #         dealer_cards.append(deal_card())
-    #     else:
-    #         dealer_stick = 1
-
-
-    compare_cards(total_score(player_cards),total_score(dealer_cards))
-    
-
-    #play again choice
-    # play_again = input("Would you like to play another game?")
-    # if play_again.lower() == "y":
-    #     player_cards = []
-    #     dealer_cards = []
-    #     the_game()
         
-
-
-the_game()
+print("""\n               [Welcome to CLI Black Jack!]""")
+while input("\nWould you like to play a game of Black Jack? Type 'y' to play!: ") == "y":
+    os.system('cls') #windows clear screen
+    os.system('clear') #linux clear screen
+    the_game()
 
